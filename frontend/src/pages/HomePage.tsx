@@ -1,5 +1,14 @@
+import Navbar from "../components/NavBar"
+
 export default function HomePage() {
-  return <h1>Home Page</h1>;
+  return (
+    <>
+      <Navbar />
+
+      <main>
+        <h1>TaskFlow</h1>
+        <p>Manage projects and collaborate with your team.</p>
+      </main>
+    </>
+  );
 }
-
-
