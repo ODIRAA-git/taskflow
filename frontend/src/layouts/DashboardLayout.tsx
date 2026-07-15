@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import StatCard from "../components/StatCard";
 
 export default function DashboardLayout() {
   return (
@@ -30,14 +31,31 @@ export default function DashboardLayout() {
 
 
       <main className="flex-1 bg-gray-50 p-8">
-        <h1 className="text-3xl font-bold">
-          Welcome to TaskFlow
-        </h1>
+  <h1 className="text-3xl font-bold">
+    Welcome to TaskFlow
+  </h1>
 
-        <p className="mt-2 text-gray-600">
-          Manage your projects and tasks from here.
-        </p>
-      </main>
+  <p className="mt-2 text-gray-600">
+    Manage your projects and tasks from here.
+  </p>
+
+  <div className="mt-8 grid gap-6 md:grid-cols-3">
+    <StatCard 
+      title="Projects"
+      value="8"
+    />
+
+    <StatCard 
+      title="Tasks"
+      value="24"
+    />
+
+    <StatCard 
+      title="Team Members"
+      value="12"
+    />
+  </div>
+</main>
 
     </div>
   );
