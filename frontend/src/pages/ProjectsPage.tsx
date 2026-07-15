@@ -14,25 +14,48 @@ export default function ProjectsPage() {
       description: "Build the TaskFlow mobile application",
     },
   ]);
+  const [projectName, setProjectName] = useState("");
+const [projectDescription, setProjectDescription] = useState("");
 
   return (
     <DashboardLayout>
       <h1 className="text-3xl font-bold">
         Projects
       </h1>
+<div className="mb-6 space-y-4">
+  <input
+    type="text"
+    placeholder="Project Name"
+    value={projectName}
+    onChange={(e) => setProjectName(e.target.value)}
+    className="w-full rounded-lg border p-3"
+  />
 
+  <input
+    type="text"
+    placeholder="Project Description"
+    value={projectDescription}
+    onChange={(e) => setProjectDescription(e.target.value)}
+    className="w-full rounded-lg border p-3"
+  />
+</div>
       <button
         className="mt-6 mb-6 rounded-lg bg-black px-4 py-2 text-white"
-        onClick={() =>
-          setProjects([
-            ...projects,
-            {
-              id: Date.now(),
-              name: "New Project",
-              description: "Project description",
-            },
-          ])
-        }
+        onClick={() => {
+  if (!projectName.trim()) return;
+
+  setProjects([
+    ...projects,
+    {
+      id: Date.now(),
+      name: projectName,
+      description: projectDescription,
+    },
+  ]);
+
+  setProjectName("");
+  setProjectDescription("");
+}}
       >
         Create Project
       </button>
