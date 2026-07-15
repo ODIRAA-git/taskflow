@@ -3,12 +3,23 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import HomePage from './pages/HomePage'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import DashboardPage from './pages/DashboardPage'
+
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+     <>
+     <DashboardPage></DashboardPage>
+     <HomePage></HomePage>
+     <RegisterPage></RegisterPage>
+     <LoginPage></LoginPage>
+     </>
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
