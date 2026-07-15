@@ -7,7 +7,9 @@ export default function HomePage() {
 
       <main>
         <section>
-          <h1>Manage your team's work with TaskFlow</h1>
+          <h1 className="text-5xl font-bold text-blue-600">
+  Manage your team's work with TaskFlow
+</h1>
 
           <p>
             Plan projects, organize tasks, and collaborate with your team
