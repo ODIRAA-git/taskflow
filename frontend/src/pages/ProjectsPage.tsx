@@ -38,6 +38,8 @@ const [projectDescription, setProjectDescription] = useState("");
     onChange={(e) => setProjectDescription(e.target.value)}
     className="w-full rounded-lg border p-3"
   />
+
+  
 </div>
       <button
         className="mt-6 mb-6 rounded-lg bg-black px-4 py-2 text-white"
@@ -73,7 +75,18 @@ const [projectDescription, setProjectDescription] = useState("");
             <p className="mt-3 text-gray-600">
               {project.description}
             </p>
+            <button
+  className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-white"
+  onClick={() =>
+    setProjects(
+      projects.filter((p) => p.id !== project.id)
+    )
+  }
+>
+  Delete
+</button>
           </div>
+          
         ))}
       </div>
     </DashboardLayout>
