@@ -124,8 +124,24 @@ updatedColumns[columnIndex].tasks.push({
     <p className="mt-2 text-sm text-gray-500">
       Priority: {task.priority}
     </p>
+    <button
+  className="mt-3 rounded-lg bg-red-600 px-3 py-1 text-sm text-white"
+  onClick={() => {
+    const updatedColumns = columns.map((column) => ({
+      ...column,
+      tasks: column.tasks.filter(
+        (item) => item.id !== task.id
+      ),
+    }));
+
+    setColumns(updatedColumns);
+  }}
+>
+  Delete
+</button>
   </div>
 ))}
+
             </div>
           </div>
         ))}
