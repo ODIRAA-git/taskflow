@@ -24,7 +24,7 @@ export default function TasksPage() {
   },
 ]);
 const [taskName, setTaskName] = useState("");
-
+const [taskStatus, setTaskStatus] = useState("To Do");
   return (
     <DashboardLayout>
       <h1 className="text-3xl font-bold">
@@ -38,6 +38,15 @@ const [taskName, setTaskName] = useState("");
     onChange={(e) => setTaskName(e.target.value)}
     className="flex-1 rounded-lg border p-3"
   />
+  <select
+  value={taskStatus}
+  onChange={(e) => setTaskStatus(e.target.value)}
+  className="rounded-lg border p-3"
+>
+  <option>To Do</option>
+  <option>In Progress</option>
+  <option>Done</option>
+</select>
 
   <button
     className="rounded-lg bg-black px-4 py-2 text-white"
@@ -46,11 +55,17 @@ const [taskName, setTaskName] = useState("");
 
       const updatedColumns = [...columns];
 
-      updatedColumns[0].tasks.push(taskName);
+      const columnIndex = updatedColumns.findIndex(
+  (column) => column.title === taskStatus
+);
+
+updatedColumns[columnIndex].tasks.push(taskName);
 
       setColumns(updatedColumns);
 
       setTaskName("");
+
+      setTaskStatus("To Do");
     }}
   >
     Add Task
