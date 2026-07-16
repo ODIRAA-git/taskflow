@@ -6,25 +6,42 @@ export default function TasksPage() {
   {
     title: "To Do",
     tasks: [
-      "Create homepage",
-      "Design database",
-    ],
+  {
+    id: 1,
+    title: "Create homepage",
+    priority: "High",
+  },
+  {
+    id: 2,
+    title: "Design database",
+    priority: "Medium",
+  },
+],
   },
   {
     title: "In Progress",
-    tasks: [
-      "Build authentication",
-    ],
+   tasks: [
+  {
+    id: 3,
+    title: "Build authentication",
+    priority: "High",
+  },
+],
   },
   {
     title: "Done",
-    tasks: [
-      "Setup React project",
-    ],
+   tasks: [
+  {
+    id: 4,
+    title: "Setup React project",
+    priority: "Low",
+  },
+],
   },
 ]);
 const [taskName, setTaskName] = useState("");
 const [taskStatus, setTaskStatus] = useState("To Do");
+const [taskPriority, setTaskPriority] = useState("Medium");
   return (
     <DashboardLayout>
       <h1 className="text-3xl font-bold">
@@ -47,6 +64,15 @@ const [taskStatus, setTaskStatus] = useState("To Do");
   <option>In Progress</option>
   <option>Done</option>
 </select>
+<select
+  value={taskPriority}
+  onChange={(e) => setTaskPriority(e.target.value)}
+  className="rounded-lg border p-3"
+>
+  <option>Low</option>
+  <option>Medium</option>
+  <option>High</option>
+</select>
 
   <button
     className="rounded-lg bg-black px-4 py-2 text-white"
@@ -58,14 +84,18 @@ const [taskStatus, setTaskStatus] = useState("To Do");
       const columnIndex = updatedColumns.findIndex(
   (column) => column.title === taskStatus
 );
-
-updatedColumns[columnIndex].tasks.push(taskName);
-
+updatedColumns[columnIndex].tasks.push({
+  id: Date.now(),
+  title: taskName,
+  priority: taskPriority,
+});
       setColumns(updatedColumns);
 
       setTaskName("");
 
       setTaskStatus("To Do");
+
+      setTaskPriority("Medium");
     }}
   >
     Add Task
@@ -82,14 +112,20 @@ updatedColumns[columnIndex].tasks.push(taskName);
             </h2>
 
             <div className="mt-4 space-y-3">
-              {column.tasks.map((task) => (
-                <div
-                  key={task}
-                  className="rounded-lg bg-white p-4 shadow"
-                >
-                  {task}
-                </div>
-              ))}
+             {column.tasks.map((task) => (
+  <div
+    key={task.id}
+    className="rounded-lg bg-white p-4 shadow"
+  >
+    <p className="font-medium">
+      {task.title}
+    </p>
+
+    <p className="mt-2 text-sm text-gray-500">
+      Priority: {task.priority}
+    </p>
+  </div>
+))}
             </div>
           </div>
         ))}
