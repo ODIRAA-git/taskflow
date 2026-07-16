@@ -16,6 +16,7 @@ export default function ProjectsPage() {
   ]);
   const [projectName, setProjectName] = useState("");
 const [projectDescription, setProjectDescription] = useState("");
+const [editingProjectId, setEditingProjectId] = useState<number | null>(null);
 
   return (
     <DashboardLayout>
@@ -46,20 +47,36 @@ const [projectDescription, setProjectDescription] = useState("");
         onClick={() => {
   if (!projectName.trim()) return;
 
-  setProjects([
-    ...projects,
-    {
-      id: Date.now(),
-      name: projectName,
-      description: projectDescription,
-    },
-  ]);
+  if (editingProjectId) {
+    setProjects(
+      projects.map((project) =>
+        project.id === editingProjectId
+          ? {
+              ...project,
+              name: projectName,
+              description: projectDescription,
+            }
+          : project
+      )
+    );
+
+    setEditingProjectId(null);
+  } else {
+    setProjects([
+      ...projects,
+      {
+        id: Date.now(),
+        name: projectName,
+        description: projectDescription,
+      },
+    ]);
+  }
 
   setProjectName("");
   setProjectDescription("");
 }}
       >
-        Create Project
+        {editingProjectId ? "Update Project" : "Create Project"}
       </button>
 
       <div className="grid gap-6 md:grid-cols-3">
@@ -75,6 +92,16 @@ const [projectDescription, setProjectDescription] = useState("");
             <p className="mt-3 text-gray-600">
               {project.description}
             </p>
+            <button
+  className="mt-4 mr-2 rounded-lg bg-blue-600 px-4 py-2 text-white"
+  onClick={() => {
+    setEditingProjectId(project.id);
+    setProjectName(project.name);
+    setProjectDescription(project.description);
+  }}
+>
+  Edit
+</button>
             <button
   className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-white"
   onClick={() =>
