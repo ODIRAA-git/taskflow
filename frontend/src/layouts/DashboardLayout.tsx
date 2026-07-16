@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ReactNode } from "react";
 
 type DashboardLayoutProps = {
-  children: ReactNode;
+  children: ReactNode; //This component accepts anything React can render and will call it children
 };
 
 export default function DashboardLayout({
