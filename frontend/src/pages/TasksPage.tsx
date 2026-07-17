@@ -42,6 +42,7 @@ export default function TasksPage() {
 const [taskName, setTaskName] = useState("");
 const [taskStatus, setTaskStatus] = useState("To Do");
 const [taskPriority, setTaskPriority] = useState("Medium");
+const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
   return (
     <DashboardLayout>
       <h1 className="text-3xl font-bold">
@@ -79,26 +80,44 @@ const [taskPriority, setTaskPriority] = useState("Medium");
     onClick={() => {
       if (!taskName.trim()) return;
 
-      const updatedColumns = [...columns];
+      if (editingTaskId) {
+        const updatedColumns = columns.map((column) => ({
+          ...column,
+          tasks: column.tasks.map((task) =>
+            task.id === editingTaskId
+              ? {
+                  ...task,
+                  title: taskName,
+                  priority: taskPriority,
+                }
+              : task
+          ),
+        }));
 
-      const columnIndex = updatedColumns.findIndex(
-  (column) => column.title === taskStatus
-);
-updatedColumns[columnIndex].tasks.push({
-  id: Date.now(),
-  title: taskName,
-  priority: taskPriority,
-});
-      setColumns(updatedColumns);
+        setColumns(updatedColumns);
+        setEditingTaskId(null);
+      } else {
+        const updatedColumns = [...columns];
+
+        const columnIndex = updatedColumns.findIndex(
+          (column) => column.title === taskStatus
+        );
+
+        updatedColumns[columnIndex].tasks.push({
+          id: Date.now(),
+          title: taskName,
+          priority: taskPriority,
+        });
+
+        setColumns(updatedColumns);
+      }
 
       setTaskName("");
-
       setTaskStatus("To Do");
-
       setTaskPriority("Medium");
     }}
   >
-    Add Task
+    {editingTaskId ? "Update Task" : "Add Task"}
   </button>
 </div>
       <div className="mt-8 grid gap-6 md:grid-cols-3">
@@ -124,6 +143,17 @@ updatedColumns[columnIndex].tasks.push({
     <p className="mt-2 text-sm text-gray-500">
       Priority: {task.priority}
     </p>
+    <button
+  className="mt-3 mr-2 rounded-lg bg-blue-600 px-3 py-1 text-sm text-white"
+  onClick={() => {
+    setEditingTaskId(task.id);
+    setTaskName(task.title);
+    setTaskPriority(task.priority);
+    setTaskStatus(column.title);
+  }}
+>
+  Edit
+</button>
     <button
   className="mt-3 rounded-lg bg-red-600 px-3 py-1 text-sm text-white"
   onClick={() => {
