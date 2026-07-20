@@ -1,5 +1,6 @@
 import DashboardLayout from "../layouts/DashboardLayout";
 import { useState } from "react";
+import TaskCard from "../components/TaskCard";
 
 export default function TasksPage() {
   const [columns, setColumns] = useState([
@@ -132,31 +133,16 @@ const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
 
             <div className="mt-4 space-y-3">
              {column.tasks.map((task) => (
-  <div
-    key={task.id}
-    className="rounded-lg bg-white p-4 shadow"
-  >
-    <p className="font-medium">
-      {task.title}
-    </p>
-
-    <p className="mt-2 text-sm text-gray-500">
-      Priority: {task.priority}
-    </p>
-    <button
-  className="mt-3 mr-2 rounded-lg bg-blue-600 px-3 py-1 text-sm text-white"
-  onClick={() => {
+  <TaskCard
+  key={task.id}
+  task={task}
+  onEdit={() => {
     setEditingTaskId(task.id);
     setTaskName(task.title);
     setTaskPriority(task.priority);
     setTaskStatus(column.title);
   }}
->
-  Edit
-</button>
-    <button
-  className="mt-3 rounded-lg bg-red-600 px-3 py-1 text-sm text-white"
-  onClick={() => {
+  onDelete={() => {
     const updatedColumns = columns.map((column) => ({
       ...column,
       tasks: column.tasks.filter(
@@ -166,12 +152,7 @@ const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
 
     setColumns(updatedColumns);
   }}
->
-  Delete
-</button>
-<button
-  className="mt-3 rounded-lg bg-green-600 px-3 py-1 text-sm text-white"
-  onClick={() => {
+  onMove={() => {
     const currentColumnIndex = columns.findIndex(
       (c) => c.title === column.title
     );
@@ -195,10 +176,7 @@ const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
 
     setColumns(updatedColumns);
   }}
->
-  Move →
-</button>
-  </div>
+/>
 ))}
 
             </div>
