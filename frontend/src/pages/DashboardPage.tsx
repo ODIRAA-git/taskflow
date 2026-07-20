@@ -1,6 +1,7 @@
 import DashboardLayout from "../layouts/DashboardLayout";
 import StatCard from "../components/StatCard";
 import RecentActivity from "../components/RecentActivity";
+import QuickActions from "../components/QuickActions";
 
 export default function DashboardPage() {
   return (
@@ -31,6 +32,7 @@ export default function DashboardPage() {
   />
 </div>
 <RecentActivity />
+<QuickActions />
     </DashboardLayout>
   );
 }
