@@ -169,6 +169,35 @@ const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
 >
   Delete
 </button>
+<button
+  className="mt-3 rounded-lg bg-green-600 px-3 py-1 text-sm text-white"
+  onClick={() => {
+    const currentColumnIndex = columns.findIndex(
+      (c) => c.title === column.title
+    );
+
+    const nextColumnIndex =
+      currentColumnIndex === columns.length - 1
+        ? 0
+        : currentColumnIndex + 1;
+
+    const updatedColumns = columns.map((col) => ({
+      ...col,
+      tasks: [...col.tasks],
+    }));
+
+    updatedColumns[currentColumnIndex].tasks =
+      updatedColumns[currentColumnIndex].tasks.filter(
+        (t) => t.id !== task.id
+      );
+
+    updatedColumns[nextColumnIndex].tasks.push(task);
+
+    setColumns(updatedColumns);
+  }}
+>
+  Move →
+</button>
   </div>
 ))}
 
