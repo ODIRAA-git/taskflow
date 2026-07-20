@@ -1,9 +1,12 @@
 import Navbar from "../components/Navbar";
+import FeaturesSection from "../components/FeaturesSection";
 
 export default function HomePage() {
   return (
     <>
       <Navbar />
+      <FeaturesSection />
+
 
       <main className="min-h-screen bg-gray-50">
         <section className="flex flex-col items-center text-center py-20 px-6">
