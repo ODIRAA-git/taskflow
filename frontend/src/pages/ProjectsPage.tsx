@@ -1,5 +1,6 @@
 import { useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
+import ProjectCard from "../components/ProjectCard";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([
@@ -81,39 +82,22 @@ const [editingProjectId, setEditingProjectId] = useState<number | null>(null);
 
       <div className="grid gap-6 md:grid-cols-3">
         {projects.map((project) => (
-          <div
-            key={project.id}
-            className="rounded-xl bg-white p-6 shadow"
-          >
-            <h2 className="text-xl font-semibold">
-              {project.name}
-            </h2>
-
-            <p className="mt-3 text-gray-600">
-              {project.description}
-            </p>
-            <button
-  className="mt-4 mr-2 rounded-lg bg-blue-600 px-4 py-2 text-white"
-  onClick={() => {
+         <ProjectCard
+  key={project.id}
+  project={project}
+  onEdit={() => {
     setEditingProjectId(project.id);
     setProjectName(project.name);
     setProjectDescription(project.description);
   }}
->
-  Edit
-</button>
-            <button
-  className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-white"
-  onClick={() =>
+  onDelete={() => {
     setProjects(
-      projects.filter((p) => p.id !== project.id)
-    )
-  }
->
-  Delete
-</button>
-          </div>
-          
+      projects.filter(
+        (p) => p.id !== project.id
+      )
+    );
+  }}
+/>
         ))}
       </div>
     </DashboardLayout>
