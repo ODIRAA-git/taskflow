@@ -1,8 +1,4 @@
-type Project = {
-  id: number;
-  name: string;
-  description: string;
-};
+import type { Project } from "../types/project";
 
 type ProjectCardProps = {
   project: Project;

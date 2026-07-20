@@ -1,8 +1,4 @@
-type Task = {
-  id: number;
-  title: string;
-  priority: string;
-};
+import type { Task } from "../types/task";
 
 type TaskCardProps = {
   task: Task;
