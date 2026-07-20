@@ -1,6 +1,7 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBar";
 import FeaturesSection from "../components/FeaturesSection";
 import HowItWorksSection from "../components/HowItWorksSection";
+import Footer from "../components/Footer";
 
 export default function HomePage() {
   return (
@@ -61,6 +62,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+    <Footer />
     </>
   );
 }
