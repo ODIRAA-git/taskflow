@@ -1,11 +1,13 @@
 import Navbar from "../components/Navbar";
 import FeaturesSection from "../components/FeaturesSection";
+import HowItWorksSection from "../components/HowItWorksSection";
 
 export default function HomePage() {
   return (
     <>
       <Navbar />
       <FeaturesSection />
+      <HowItWorksSection />
 
 
       <main className="min-h-screen bg-gray-50">
