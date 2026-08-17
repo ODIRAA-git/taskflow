@@ -1,23 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
+import {
+  getProjects,
+  createProject,
+} from "../services/projectService";
 import ProjectCard from "../components/ProjectCard";
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState([
-    {
-      id: 1,
-      name: "Website Redesign",
-      description: "Redesign the company website",
-    },
-    {
-      id: 2,
-      name: "Mobile App",
-      description: "Build the TaskFlow mobile application",
-    },
-  ]);
+  const [projects, setProjects] = useState<any[]>([]);
   const [projectName, setProjectName] = useState("");
 const [projectDescription, setProjectDescription] = useState("");
 const [editingProjectId, setEditingProjectId] = useState<number | null>(null);
+
+useEffect(() => {
+  const loadProjects = async () => {
+    try {
+      const data = await getProjects();
+      setProjects(data);
+    } catch (error) {
+      console.error("Failed to load projects:", error);
+    }
+  };
+
+  loadProjects();
+}, []);
 
   return (
     <DashboardLayout>

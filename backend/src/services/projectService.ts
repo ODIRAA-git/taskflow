@@ -3,7 +3,13 @@ import prisma from "../config/prisma";
 export const getAllProjects = async () => {
   return prisma.project.findMany({
     include: {
-      owner: true,
+      owner: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
       tasks: true,
     },
   });

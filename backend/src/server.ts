@@ -6,10 +6,11 @@ import projectRoutes from "./routes/projectRoutes";
 dotenv.config();
 
 const app = express();
-app.use("/projects", projectRoutes);
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/projects", projectRoutes);
 
 app.get("/", (req, res) => {
   res.send("🚀 TaskFlow Backend is running!");
