@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+
+# Prisma / AI-generated skills
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
+
+# macOS
+.DS_Store
