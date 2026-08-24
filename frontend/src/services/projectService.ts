@@ -31,3 +31,25 @@ export const createProject = async (
 
   return response.json();
 };
+export const updateProject = async (
+  id: number,
+  name: string,
+  description: string
+) => {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      description,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update project");
+  }
+
+  return response.json();
+};

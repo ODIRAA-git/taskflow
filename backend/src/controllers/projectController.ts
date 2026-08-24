@@ -38,3 +38,25 @@ export const createProject = async (
     });
   }
 };
+export const updateProject = async (
+  req,
+  res
+) => {
+  try {
+    const id = Number(req.params.id);
+    const { name, description } = req.body;
+
+    const project =
+      await projectService.updateProject(
+        id,
+        name,
+        description
+      );
+
+    res.json(project);
+  } catch {
+    res.status(500).json({
+      message: "Failed to update project",
+    });
+  }
+};

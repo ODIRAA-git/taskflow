@@ -3,6 +3,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import {
   getProjects,
   createProject,
+  updateProject,
 } from "../services/projectService";
 import ProjectCard from "../components/ProjectCard";
 
@@ -50,41 +51,45 @@ useEffect(() => {
   
 </div>
       <button
-        className="mt-6 mb-6 rounded-lg bg-black px-4 py-2 text-white"
-        onClick={() => {
-  if (!projectName.trim()) return;
+  className="mt-6 mb-6 rounded-lg bg-black px-4 py-2 text-white"
+  onClick={async () => {
+    if (!projectName.trim()) return;
 
-  if (editingProjectId) {
-    setProjects(
-      projects.map((project) =>
-        project.id === editingProjectId
-          ? {
-              ...project,
-              name: projectName,
-              description: projectDescription,
-            }
-          : project
-      )
-    );
+    try {
+    if (editingProjectId) {
+  const updatedProject = await updateProject(
+    editingProjectId,
+    projectName,
+    projectDescription
+  );
 
-    setEditingProjectId(null);
-  } else {
-    setProjects([
-      ...projects,
-      {
-        id: Date.now(),
-        name: projectName,
-        description: projectDescription,
-      },
-    ]);
-  }
+  setProjects(
+    projects.map((project) =>
+      project.id === editingProjectId
+        ? updatedProject
+        : project
+    )
+  );
 
-  setProjectName("");
-  setProjectDescription("");
-}}
-      >
-        {editingProjectId ? "Update Project" : "Create Project"}
-      </button>
+  setEditingProjectId(null);
+} else {
+        const newProject = await createProject(
+          projectName,
+          projectDescription
+        );
+
+        setProjects([...projects, newProject]);
+      }
+
+      setProjectName("");
+      setProjectDescription("");
+    } catch (error) {
+      console.error("Failed to save project:", error);
+    }
+  }}
+>
+  {editingProjectId ? "Update Project" : "Create Project"}
+</button>
 
       <div className="grid gap-6 md:grid-cols-3">
         {projects.map((project) => (

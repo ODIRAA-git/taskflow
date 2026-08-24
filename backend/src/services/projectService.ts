@@ -27,3 +27,18 @@ export const createProject = async (
     },
   });
 };
+export const updateProject = async (
+  id: number,
+  name: string,
+  description?: string
+) => {
+  return prisma.project.update({
+    where: {
+      id,
+    },
+    data: {
+      name,
+      description,
+    },
+  });
+};
