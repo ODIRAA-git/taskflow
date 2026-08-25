@@ -32,6 +32,18 @@ export const updateProject = async (
   name: string,
   description?: string
 ) => {
+  const existingProject = await prisma.project.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!existingProject) {
+    const error = new Error("Project not found");
+    error.name = "ProjectNotFoundError";
+    throw error;
+  }
+
   return prisma.project.update({
     where: {
       id,
@@ -41,4 +53,21 @@ export const updateProject = async (
       description,
     },
   });
+};
+export const deleteProject = async (id: number) => {
+  try {
+    return await prisma.project.delete({
+      where: {
+        id,
+      },
+    });
+  } catch (error: any) {
+    if (error?.code === "P2025") {
+      const notFoundError = new Error("Project not found");
+      notFoundError.name = "ProjectNotFoundError";
+      throw notFoundError;
+    }
+
+    throw error;
+  }
 };
