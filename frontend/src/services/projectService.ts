@@ -53,3 +53,12 @@ export const updateProject = async (
 
   return response.json();
 };
+export const deleteProject = async (id: number) => {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete project");
+  }
+};

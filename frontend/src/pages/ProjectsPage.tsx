@@ -4,6 +4,7 @@ import {
   getProjects,
   createProject,
   updateProject,
+  deleteProject,
 } from "../services/projectService";
 import ProjectCard from "../components/ProjectCard";
 
@@ -101,13 +102,19 @@ useEffect(() => {
     setProjectName(project.name);
     setProjectDescription(project.description);
   }}
-  onDelete={() => {
+  onDelete={async () => {
+  try {
+    await deleteProject(project.id);
+
     setProjects(
       projects.filter(
         (p) => p.id !== project.id
       )
     );
-  }}
+  } catch (error) {
+    console.error("Failed to delete project:", error);
+  }
+}}
 />
         ))}
       </div>
