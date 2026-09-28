@@ -1,45 +1,54 @@
 import DashboardLayout from "../layouts/DashboardLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskCard from "../components/TaskCard";
+import {
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+} from "../services/taskService";
 
 export default function TasksPage() {
   const [columns, setColumns] = useState([
   {
     title: "To Do",
-    tasks: [
-  {
-    id: 1,
-    title: "Create homepage",
-    priority: "High",
-  },
-  {
-    id: 2,
-    title: "Design database",
-    priority: "Medium",
-  },
-],
+    tasks: [],
   },
   {
     title: "In Progress",
-   tasks: [
-  {
-    id: 3,
-    title: "Build authentication",
-    priority: "High",
-  },
-],
+    tasks: [],
   },
   {
     title: "Done",
-   tasks: [
-  {
-    id: 4,
-    title: "Setup React project",
-    priority: "Low",
-  },
-],
+    tasks: [],
   },
 ]);
+useEffect(() => {
+  const loadTasks = async () => {
+    try {
+      const tasks = await getTasks();
+
+      setColumns([
+        {
+          title: "To Do",
+          tasks: tasks.filter((task) => task.status === "To Do"),
+        },
+        {
+          title: "In Progress",
+          tasks: tasks.filter((task) => task.status === "In Progress"),
+        },
+        {
+          title: "Done",
+          tasks: tasks.filter((task) => task.status === "Done"),
+        },
+      ]);
+    } catch (error) {
+      console.error("Failed to load tasks:", error);
+    }
+  };
+
+  loadTasks();
+}, []);
 const [taskName, setTaskName] = useState("");
 const [taskStatus, setTaskStatus] = useState("To Do");
 const [taskPriority, setTaskPriority] = useState("Medium");
@@ -78,40 +87,55 @@ const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
 
   <button
     className="rounded-lg bg-black px-4 py-2 text-white"
-    onClick={() => {
+    onClick={async () => {
       if (!taskName.trim()) return;
 
-      if (editingTaskId) {
-        const updatedColumns = columns.map((column) => ({
-          ...column,
-          tasks: column.tasks.map((task) =>
-            task.id === editingTaskId
-              ? {
-                  ...task,
-                  title: taskName,
-                  priority: taskPriority,
-                }
-              : task
-          ),
-        }));
+     if (editingTaskId) {
+  try {
+    const updatedTask = await updateTask(
+      editingTaskId,
+      taskName,
+      taskPriority,
+      taskStatus
+    );
 
-        setColumns(updatedColumns);
-        setEditingTaskId(null);
+    const updatedColumns = columns.map((column) => ({
+      ...column,
+      tasks: column.tasks
+        .filter((task) => task.id !== editingTaskId)
+        .concat(
+          column.title === taskStatus ? [updatedTask] : []
+        ),
+    }));
+
+    setColumns(updatedColumns);
+    setEditingTaskId(null);
+  } catch (error) {
+    console.error("Failed to update task:", error);
+  }
+
       } else {
-        const updatedColumns = [...columns];
+  try {
+    const newTask = await createTask(
+      taskName,
+      taskPriority,
+      taskStatus
+    );
 
-        const columnIndex = updatedColumns.findIndex(
-          (column) => column.title === taskStatus
-        );
+    const updatedColumns = columns.map((column) =>
+      column.title === taskStatus
+        ? {
+            ...column,
+            tasks: [...column.tasks, newTask],
+          }
+        : column
+    );
 
-        updatedColumns[columnIndex].tasks.push({
-          id: Date.now(),
-          title: taskName,
-          priority: taskPriority,
-        });
-
-        setColumns(updatedColumns);
-      }
+    setColumns(updatedColumns);
+  } catch (error) {
+    console.error("Failed to create task:", error);
+  }
+}
 
       setTaskName("");
       setTaskStatus("To Do");
@@ -142,7 +166,10 @@ const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
     setTaskPriority(task.priority);
     setTaskStatus(column.title);
   }}
-  onDelete={() => {
+ onDelete={async () => {
+  try {
+    await deleteTask(task.id);
+
     const updatedColumns = columns.map((column) => ({
       ...column,
       tasks: column.tasks.filter(
@@ -151,8 +178,12 @@ const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
     }));
 
     setColumns(updatedColumns);
-  }}
-  onMove={() => {
+  } catch (error) {
+    console.error("Failed to delete task:", error);
+  }
+}}
+  onMove={async () => {
+  try {
     const currentColumnIndex = columns.findIndex(
       (c) => c.title === column.title
     );
@@ -162,20 +193,29 @@ const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
         ? 0
         : currentColumnIndex + 1;
 
+    const nextStatus = columns[nextColumnIndex].title;
+
+    const updatedTask = await updateTask(
+      task.id,
+      task.title,
+      task.priority,
+      nextStatus
+    );
+
     const updatedColumns = columns.map((col) => ({
       ...col,
-      tasks: [...col.tasks],
+      tasks: col.tasks.filter(
+        (t) => t.id !== task.id
+      ),
     }));
 
-    updatedColumns[currentColumnIndex].tasks =
-      updatedColumns[currentColumnIndex].tasks.filter(
-        (t) => t.id !== task.id
-      );
-
-    updatedColumns[nextColumnIndex].tasks.push(task);
+    updatedColumns[nextColumnIndex].tasks.push(updatedTask);
 
     setColumns(updatedColumns);
-  }}
+  } catch (error) {
+    console.error("Failed to move task:", error);
+  }
+}}
 />
 ))}
 
