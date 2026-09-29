@@ -7,8 +7,8 @@ A full-stack team collaboration and project management platform for organising p
 ## Screenshots
 
 ![Homepage](docs/screenshots/taskflowHomepage.png)
-![Dashboard](docs/screenshot/taskflowDashboardpage.png)
-![Task activities](docs/screenshot/taskflowTaskPage.png)
+![Dashboard](docs/screenshots/taskflowDashboardpage.png)
+![Task activities](docs/screenshots/taskflowTaskPage.png)
 
 ## Features
 
