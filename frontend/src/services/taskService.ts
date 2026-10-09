@@ -6,6 +6,7 @@ export type Task = {
   priority: string;
   status: string;
   projectId?: number | null;
+  createdAt: string;
 };
 
 export const getTasks = async (): Promise<Task[]> => {
@@ -51,7 +52,7 @@ export const updateTask = async (
   status: string,
   projectId?: number
 ): Promise<Task> => {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const response = await fetch(API_URL + "/" + id, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -72,7 +73,7 @@ export const updateTask = async (
 };
 
 export const deleteTask = async (id: number): Promise<void> => {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const response = await fetch(API_URL + "/" + id, {
     method: "DELETE",
   });
 

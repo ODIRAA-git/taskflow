@@ -4,21 +4,48 @@ import StatCard from "../components/StatCard";
 import RecentActivity from "../components/RecentActivity";
 import QuickActions from "../components/QuickActions";
 import { getProjects } from "../services/projectService";
+import { getTasks } from "../services/taskService";
 
 export default function DashboardPage() {
   const [projectCount, setProjectCount] = useState(0);
+  const [taskCount, setTaskCount] = useState(0);
+  const [completedCount, setCompletedCount] = useState(0);
+
+  const [tasks, setTasks] = useState<
+    {
+      id: number;
+      title: string;
+      status: string;
+      createdAt: string;
+    }[]
+  >([]);
 
   useEffect(() => {
-    const loadProjects = async () => {
+    const loadDashboardData = async () => {
       try {
         const projects = await getProjects();
         setProjectCount(projects.length);
+
+        const loadedTasks = await getTasks();
+
+        setTasks(loadedTasks);
+
+        setTaskCount(loadedTasks.length);
+
+        setCompletedCount(
+          loadedTasks.filter(
+            (task) => task.status === "Done"
+          ).length
+        );
       } catch (error) {
-        console.error("Failed to load projects:", error);
+        console.error(
+          "Failed to load dashboard data:",
+          error
+        );
       }
     };
 
-    loadProjects();
+    loadDashboardData();
   }, []);
 
   return (
@@ -41,16 +68,17 @@ export default function DashboardPage() {
 
         <StatCard
           title="Tasks"
-          value="24"
+          value={taskCount}
         />
 
         <StatCard
           title="Completed"
-          value="12"
+          value={completedCount}
         />
       </div>
 
-      <RecentActivity />
+      <RecentActivity tasks={tasks} />
+
       <QuickActions />
     </DashboardLayout>
   );
